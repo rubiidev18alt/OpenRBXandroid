@@ -57,7 +57,10 @@ jobs:
             python3 - <<'PY'
           import re
           lines = [l.strip() for l in open('/tmp/gradle-build.log', errors='replace') if l.strip()]
-          errs = [l for l in lines if re.search(r'(CMake Error|FAILED:|FAILURE:|:\d+:\d*: error:|ld\.lld: error|^e: |Execution failed|What went wrong)', l)]
+          errs = []
+          for idx, l in enumerate(lines):
+              if re.search(r'(CMake Error|FAILED:|FAILURE:|:\d+:\d*: error:|ld\.lld: error|^e: |Execution failed|What went wrong)', l):
+                  errs.extend(lines[idx:idx+4])
           tail = lines[-25:]
           combined = []
           seen = set()
@@ -65,8 +68,8 @@ jobs:
               if l not in seen:
                   seen.add(l)
                   combined.append(l[:260])
-          for i in range(0, min(len(combined), 60), 6):
-              print("::error::" + " | ".join(combined[i:i+6]))
+          for i in range(0, min(len(combined), 60), 5):
+              print("::error::" + " | ".join(combined[i:i+5]))
           PY
             exit 1
           fi
