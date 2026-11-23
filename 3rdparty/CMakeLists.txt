@@ -625,12 +625,18 @@ if (NOT EXISTS "${OPENRBX_OPENSSL_PREFIX}/include/openssl/ssl.h")
     else()
       message(FATAL_ERROR "Unsupported Android ABI for OpenSSL: ${CMAKE_ANDROID_ARCH_ABI}")
     endif()
-    set(OPENRBX_ANDROID_API "${CMAKE_SYSTEM_VERSION}")
-    if (NOT OPENRBX_ANDROID_API)
+    if (DEFINED ANDROID_PLATFORM_LEVEL AND ANDROID_PLATFORM_LEVEL GREATER_EQUAL 21)
+      set(OPENRBX_ANDROID_API "${ANDROID_PLATFORM_LEVEL}")
+    elseif (CMAKE_SYSTEM_VERSION AND CMAKE_SYSTEM_VERSION GREATER_EQUAL 21)
+      set(OPENRBX_ANDROID_API "${CMAKE_SYSTEM_VERSION}")
+    else()
       set(OPENRBX_ANDROID_API 24)
     endif()
     get_filename_component(OPENRBX_NDK_BIN_DIR "${CMAKE_C_COMPILER}" DIRECTORY)
     set(OPENRBX_NDK_ROOT "${CMAKE_ANDROID_NDK}")
+    if (NOT OPENRBX_NDK_ROOT)
+      set(OPENRBX_NDK_ROOT "${ANDROID_NDK}")
+    endif()
     if (NOT OPENRBX_NDK_ROOT)
       set(OPENRBX_NDK_ROOT "$ENV{ANDROID_NDK_ROOT}")
     endif()
@@ -653,25 +659,36 @@ if (NOT EXISTS "${OPENRBX_OPENSSL_PREFIX}/include/openssl/ssl.h")
             "--prefix=${OPENRBX_OPENSSL_PREFIX}" --libdir=lib
     WORKING_DIRECTORY "${OPENRBX_OPENSSL_BINARY_DIR}"
     RESULT_VARIABLE result
+    OUTPUT_VARIABLE _ssl_out
+    ERROR_VARIABLE _ssl_err
   )
   if (NOT result EQUAL 0)
-    message(FATAL_ERROR "OpenSSL configure failed")
+    message(FATAL_ERROR "OpenSSL configure failed:\n${_ssl_out}\n${_ssl_err}")
   endif()
   execute_process(
     COMMAND ${OPENRBX_OPENSSL_ENV_ARGS} ${OPENRBX_OPENSSL_MAKE} build_libs
     WORKING_DIRECTORY "${OPENRBX_OPENSSL_BINARY_DIR}"
     RESULT_VARIABLE result
+    OUTPUT_VARIABLE _ssl_out
+    ERROR_VARIABLE _ssl_err
   )
   if (NOT result EQUAL 0)
-    message(FATAL_ERROR "OpenSSL build failed")
+    string(LENGTH "${_ssl_err}" _err_len)
+    if (_err_len GREATER 1500)
+      math(EXPR _err_off "${_err_len} - 1500")
+      string(SUBSTRING "${_ssl_err}" ${_err_off} 1500 _ssl_err)
+    endif()
+    message(FATAL_ERROR "OpenSSL build failed (API=${OPENRBX_ANDROID_API}, NDK=${OPENRBX_NDK_ROOT}, BIN=${OPENRBX_NDK_BIN_DIR}):\n${_ssl_err}")
   endif()
   execute_process(
     COMMAND ${OPENRBX_OPENSSL_ENV_ARGS} ${OPENRBX_OPENSSL_MAKE} install_dev
     WORKING_DIRECTORY "${OPENRBX_OPENSSL_BINARY_DIR}"
     RESULT_VARIABLE result
+    OUTPUT_VARIABLE _ssl_out
+    ERROR_VARIABLE _ssl_err
   )
   if (NOT result EQUAL 0)
-    message(FATAL_ERROR "OpenSSL install failed")
+    message(FATAL_ERROR "OpenSSL install failed:\n${_ssl_err}")
   endif()
 endif()
 
@@ -684,8 +701,9 @@ if (NOT EXISTS "${OPENRBX_CURL_PREFIX}/lib/cmake/CURL/CURLConfig.cmake")
   if (ANDROID)
     list(APPEND OPENRBX_CURL_EXTRA_ARGS
       -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
+      -DCMAKE_MAKE_PROGRAM=${CMAKE_MAKE_PROGRAM}
       -DANDROID_ABI=${CMAKE_ANDROID_ARCH_ABI}
-      -DANDROID_PLATFORM=android-${CMAKE_SYSTEM_VERSION}
+      -DANDROID_PLATFORM=android-${OPENRBX_ANDROID_API}
       -DOPENSSL_INCLUDE_DIR=${OPENRBX_OPENSSL_PREFIX}/include
       -DOPENSSL_SSL_LIBRARY=${OPENRBX_OPENSSL_PREFIX}/lib/libssl.a
       -DOPENSSL_CRYPTO_LIBRARY=${OPENRBX_OPENSSL_PREFIX}/lib/libcrypto.a
