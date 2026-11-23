@@ -6,7 +6,7 @@ plugins {
 android {
     namespace = "com.openrbx.android"
     compileSdk = 34
-    ndkVersion = "26.3.11579264"
+    ndkVersion = "27.2.12479018"
 
     defaultConfig {
         applicationId = "com.openrbx.android"
