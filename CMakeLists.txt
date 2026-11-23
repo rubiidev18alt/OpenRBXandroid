@@ -569,7 +569,7 @@ add_engine_library(app
 
 if (TARGET app)
   target_include_directories(app PRIVATE "${OPENRBX_3RDPARTY}/dr_libs")
-  target_link_libraries(app PRIVATE OpenAL::OpenAL openmpt stb_vorbis CURL::libcurl)
+  target_link_libraries(app PRIVATE OpenAL::OpenAL openmpt stb_vorbis CURL::libcurl OpenSSL::Crypto)
 endif()
 
 add_engine_library(network
