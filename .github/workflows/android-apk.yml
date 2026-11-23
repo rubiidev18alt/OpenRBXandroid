@@ -59,7 +59,7 @@ jobs:
           lines = [l.strip() for l in open('/tmp/gradle-build.log', errors='replace') if l.strip()]
           errs = []
           for idx, l in enumerate(lines):
-              if re.search(r'(CMake Error|FAILED:|FAILURE:|:\d+:\d*: error:|ld\.lld: error|^e: |Execution failed|What went wrong)', l):
+              if re.search(r'(CMake Error|FAILED:|FAILURE:|:\d+:\d*: (?:fatal )?error:|ld\.lld: error|^e: |Execution failed|What went wrong)', l):
                   errs.extend(lines[idx:idx+4])
           tail = lines[-25:]
           combined = []

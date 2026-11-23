@@ -10,12 +10,14 @@
 #include "G3D/Matrix3.h"
 #include "G3D/spline.h"
 #include "G3D/GLight.h"
+#if !defined(__ANDROID__)
 #include <sys/timeb.h>
-#include <sys/types.h> 
+#include <sys/types.h>
 
 #ifndef _MSC_VER
    #define _timeb timeb
    #define _ftime ftime
+#endif
 #endif
 #ifdef _MSC_VER
 #   pragma warning(push)
