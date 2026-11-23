@@ -327,6 +327,7 @@ private:
 #elif (defined(G3D_LINUX) || defined(G3D_MINGW32))
 
     inline uint64 System::getCycleCount() {
+#       if defined(__i386__) || defined(__x86_64__)
         uint32 timehi, timelo;
 
         __asm__ __volatile__ (
@@ -336,6 +337,11 @@ private:
             : );
 
         return ((uint64)timehi << 32) + (uint64)timelo;
+#       else
+        struct timespec ts;
+        clock_gettime(CLOCK_MONOTONIC, &ts);
+        return (uint64)ts.tv_sec * 1000000000ULL + (uint64)ts.tv_nsec;
+#       endif
     }
 
 #elif defined(G3D_OSX)

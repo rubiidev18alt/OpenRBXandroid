@@ -280,6 +280,7 @@ void PlayerController::onEvent(const RunService* source, Heartbeat event)
 
 		NavKeys nav;
 		hardware->getNavKeys(nav);
+		G3D::Vector2 virtualJoy = hardware->getVirtualJoystick();
 
 		if (nav.arrowKeyDown()) {
 			if (nav.left_arrow || nav.right_arrow) {
@@ -315,11 +316,27 @@ void PlayerController::onEvent(const RunService* source, Heartbeat event)
 
 			localHumanoid->setWalkDirection(moveForward);
 		}
+		else if (virtualJoy.squaredLength() > 0.01f) {
+			float forwardBackward = virtualJoy.y;
+			float leftRight = -virtualJoy.x;
+
+			G3D::Vector3 look = camera->getCameraCoordinateFrame().lookVector();
+			look.y = 0.0f;
+			look.unitize();
+
+			G3D::Vector3 moveForward = G3D::Vector3(look.x, 0.0f, look.z) * forwardBackward;
+			moveForward += G3D::Vector3(look.z, 0.0f, -look.x) * leftRight;
+			if (moveForward.squaredMagnitude() > 1.0f) {
+				moveForward.unitize();
+			}
+
+			localHumanoid->setWalkDirection(moveForward);
+		}
 		else {
 			localHumanoid->setWalkDirection(G3D::Vector3::zero());
 		}
 
-		if (nav.space) {
+		if (nav.space || hardware->isVirtualJumpDown()) {
 			localHumanoid->setJump(true);
 		}
 	}

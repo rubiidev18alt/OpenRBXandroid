@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000">
+
+    <SurfaceView
+        android:id="@+id/gameSurfaceView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.openrbx.android.TouchControlsView
+        android:id="@+id/touchControlsView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- Classic 2007 Top Toolbar + Modern Telemetry -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="8dp">
+
+        <Button
+            android:id="@+id/btnLeave"
+            android:layout_width="wrap_content"
+            android:layout_height="34dp"
+            android:text="@string/leave_game"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            android:textColor="#1F2B3D"
+            android:textSize="12sp"
+            android:background="@drawable/bg_retro_2007_slot"
+            android:paddingHorizontal="10dp" />
+
+        <Button
+            android:id="@+id/btnRespawn"
+            android:layout_width="wrap_content"
+            android:layout_height="34dp"
+            android:layout_marginStart="6dp"
+            android:text="@string/respawn"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            android:textColor="#1F2B3D"
+            android:textSize="12sp"
+            android:background="@drawable/bg_retro_2007_slot"
+            android:paddingHorizontal="10dp" />
+
+        <Button
+            android:id="@+id/btnCameraMode"
+            android:layout_width="wrap_content"
+            android:layout_height="34dp"
+            android:layout_marginStart="6dp"
+            android:text="3P"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:background="@drawable/bg_retro_2007_button"
+            android:paddingHorizontal="10dp" />
+
+        <Button
+            android:id="@+id/btnSpawnBrick"
+            android:layout_width="wrap_content"
+            android:layout_height="34dp"
+            android:layout_marginStart="6dp"
+            android:text="+Brick"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:background="@drawable/bg_retro_2007_button"
+            android:paddingHorizontal="10dp" />
+
+        <Button
+            android:id="@+id/btnToggleModernPanel"
+            android:layout_width="wrap_content"
+            android:layout_height="34dp"
+            android:layout_marginStart="6dp"
+            android:text="FX &amp; Lua"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:background="@drawable/bg_hud_pill"
+            android:paddingHorizontal="10dp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <!-- Modern Telemetry + Classic 2007 Health Bar -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_hud_pill"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="5dp">
+
+            <TextView
+                android:id="@+id/tvStats"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="60 FPS • 14:00"
+                android:textColor="#DCE6F5"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="3dp" />
+
+            <ProgressBar
+                android:id="@+id/healthBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="115dp"
+                android:layout_height="9dp"
+                android:max="100"
+                android:progress="100"
+                android:progressTint="#45D65A"
+                android:progressBackgroundTint="#4A1A1A" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Modern Twist Panel: Visual Style + Time-of-Day + Lua Console -->
+    <LinearLayout
+        android:id="@+id/modernPanel"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|start"
+        android:layout_marginTop="52dp"
+        android:layout_marginStart="10dp"
+        android:orientation="vertical"
+        android:background="@drawable/bg_hud_pill"
+        android:padding="12dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Visual Style"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textSize="12sp"
+            android:layout_marginBottom="6dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+
+            <Button
+                android:id="@+id/btnStyle2007"
+                android:layout_width="0dp"
+                android:layout_height="32dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="4dp"
+                android:text="2007 Crisp"
+                android:textAllCaps="false"
+                android:textSize="11sp"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/bg_retro_2007_button" />
+
+            <Button
+                android:id="@+id/btnStyleModern"
+                android:layout_width="0dp"
+                android:layout_height="32dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="4dp"
+                android:text="Modern Air"
+                android:textAllCaps="false"
+                android:textSize="11sp"
+                android:textColor="#1F2B3D"
+                android:background="@drawable/bg_retro_2007_slot" />
+
+            <Button
+                android:id="@+id/btnStyleTwilight"
+                android:layout_width="0dp"
+                android:layout_height="32dp"
+                android:layout_weight="1"
+                android:text="Dusk"
+                android:textAllCaps="false"
+                android:textSize="11sp"
+                android:textColor="#1F2B3D"
+                android:background="@drawable/bg_retro_2007_slot" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvTimeOfDay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sun Time: 14:00"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textSize="12sp" />
+
+        <SeekBar
+            android:id="@+id/seekTimeOfDay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="23"
+            android:progress="14"
+            android:layout_marginBottom="10dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <EditText
+                android:id="@+id/etLuaCommand"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:hint="@string/lua_cmd_hint"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#8FA3BF"
+                android:textSize="12sp"
+                android:background="#223045"
+                android:paddingHorizontal="8dp"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnRunLua"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_marginStart="6dp"
+                android:text="@string/run_lua"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/bg_retro_2007_button" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Classic 2007 Bottom Beveled Backpack Hotbar -->
+    <HorizontalScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="10dp"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/backpackBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/bg_retro_2007_panel"
+            android:paddingHorizontal="6dp"
+            android:paddingVertical="4dp" />
+    </HorizontalScrollView>
+</FrameLayout>

@@ -230,6 +230,27 @@ std::string FileSystem::getContentDirectory()
 
 #else
 
+static std::string sAndroidFilesDir;
+static std::string sAndroidCacheDir;
+static std::string sAndroidContentDir;
+
+static std::string ensureTrailingSlash(std::string path)
+{
+	if (!path.empty() && path.back() != '/') {
+		path += '/';
+	}
+	return path;
+}
+
+void FileSystem::setAndroidBasePaths(
+	const std::string& filesDir, const std::string& cacheDir, const std::string& contentDir
+)
+{
+	sAndroidFilesDir = ensureTrailingSlash(filesDir);
+	sAndroidCacheDir = ensureTrailingSlash(cacheDir);
+	sAndroidContentDir = ensureTrailingSlash(contentDir);
+}
+
 static std::string getBaseDirectory(const char* variable, const char* homeSubDirectory)
 {
 	const char* base = std::getenv(variable);
@@ -254,12 +275,18 @@ static bool createDirectory(const std::string& path)
 
 std::string FileSystem::getUserAppDataDirectory(bool create, const char* subDirectory)
 {
-	std::string base = getBaseDirectory("XDG_DATA_HOME", "/.local/share");
-	if (base.empty()) {
-		return "";
+	std::string path;
+	if (!sAndroidFilesDir.empty()) {
+		path = sAndroidFilesDir + "Roblox/";
+	}
+	else {
+		std::string base = getBaseDirectory("XDG_DATA_HOME", "/.local/share");
+		if (base.empty()) {
+			return "";
+		}
+		path = base + "/Roblox/";
 	}
 
-	std::string path = base + "/Roblox/";
 	if (subDirectory) {
 		path += subDirectory;
 		path += '/';
@@ -274,12 +301,18 @@ std::string FileSystem::getUserAppDataDirectory(bool create, const char* subDire
 
 std::string FileSystem::getCacheDirectory(bool create)
 {
-	std::string base = getBaseDirectory("XDG_CACHE_HOME", "/.cache");
-	if (base.empty()) {
-		return "";
+	std::string path;
+	if (!sAndroidCacheDir.empty()) {
+		path = sAndroidCacheDir + "Roblox/";
+	}
+	else {
+		std::string base = getBaseDirectory("XDG_CACHE_HOME", "/.cache");
+		if (base.empty()) {
+			return "";
+		}
+		path = base + "/Roblox/";
 	}
 
-	std::string path = base + "/Roblox/";
 	if (create && !createDirectory(path)) {
 		return "";
 	}
@@ -289,6 +322,13 @@ std::string FileSystem::getCacheDirectory(bool create)
 
 std::string FileSystem::getContentDirectory()
 {
+	if (!sAndroidContentDir.empty()) {
+		std::error_code error;
+		if (std::filesystem::is_directory(sAndroidContentDir, error)) {
+			return sAndroidContentDir;
+		}
+	}
+
 	std::string base = getBaseDirectory("XDG_DATA_HOME", "/.local/share");
 	if (base.empty()) {
 		return "";
@@ -303,6 +343,12 @@ std::string FileSystem::getContentDirectory()
 	return path;
 }
 
+#endif
+
+#ifdef _WIN32
+void FileSystem::setAndroidBasePaths(const std::string&, const std::string&, const std::string&)
+{
+}
 #endif
 
 } // namespace RBX

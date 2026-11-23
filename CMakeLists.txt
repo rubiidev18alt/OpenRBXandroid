@@ -18,7 +18,7 @@ if (ENABLE_CLANG_TIDY)
   set_source_files_properties(Client/App/v8world/Contact.cpp PROPERTIES SKIP_LINTING ON)
 endif()
 
-if (NOT CMAKE_SIZEOF_VOID_P EQUAL 8)
+if (NOT ANDROID AND NOT CMAKE_SIZEOF_VOID_P EQUAL 8)
   message(FATAL_ERROR "OpenRBX only builds 64-bit binaries")
 endif()
 
@@ -77,8 +77,10 @@ set(OPENRBX_RUNTIME_FILES
 if (NOT WIN32)
   set(THREADS_PREFER_PTHREAD_FLAG ON)
   find_package(Threads REQUIRED)
-  find_package(OpenGL REQUIRED COMPONENTS OpenGL EGL)
-  find_package(X11 REQUIRED)
+  if (NOT ANDROID)
+    find_package(OpenGL REQUIRED COMPONENTS OpenGL EGL)
+    find_package(X11 REQUIRED)
+  endif()
 endif()
 set(OPENRBX_RUNTIME_OUTPUTS)
 foreach(file ${OPENRBX_RUNTIME_FILES})
@@ -93,6 +95,7 @@ add_custom_target(runtime_files DEPENDS ${OPENRBX_RUNTIME_OUTPUTS})
 
 add_subdirectory(3rdparty)
 
+if (NOT ANDROID)
 find_package(Qt6 REQUIRED COMPONENTS Widgets Core5Compat)
 
 file(GLOB OPENRBX_SCINTILLA_SOURCES
@@ -115,6 +118,7 @@ target_include_directories(scintilla PUBLIC
 )
 target_include_directories(scintilla PRIVATE "${PROJECT_SOURCE_DIR}/3rdparty/lexilla/lexlib")
 target_link_libraries(scintilla PUBLIC Qt6::Widgets Qt6::Core5Compat)
+endif() # NOT ANDROID
 
 set(OPENRBX_APP_SOURCES
   Client/App/security/SecurityContext.cpp
@@ -486,6 +490,14 @@ if (WIN32)
     _VC80_UPGRADE=0x0710
     _MBCS
   )
+elseif (ANDROID)
+  set(OPENRBX_COMMON_DEFINITIONS
+    NDEBUG
+    _LIB
+    G3D_DEBUG_NOGUI
+    G3D_EGL
+    G3D_GLES_COMPAT
+  )
 else()
   set(OPENRBX_COMMON_DEFINITIONS
     NDEBUG
@@ -587,6 +599,49 @@ add_engine_library(appdraw
 add_engine_library(renderlib
   SOURCES ${OPENRBX_RENDERLIB_SOURCES}
 )
+
+if (ANDROID)
+  add_library(openrbx_android SHARED
+    Client/android/AndroidEngine.cpp
+    Client/android/AndroidUserInput.cpp
+    Client/android/AndroidWindow.cpp
+    Client/android/gl_es_compat.cpp
+    Client/android/jni_bridge.cpp
+    Client/qt/FactoryRegistration.cpp
+    Client/win/ReflectionMetadata.cpp
+  )
+  openrbx_compile_defaults(openrbx_android)
+  set_target_properties(openrbx_android PROPERTIES CXX_STANDARD 23 CXX_SCAN_FOR_MODULES OFF)
+  target_compile_definitions(openrbx_android PRIVATE ${OPENRBX_COMMON_DEFINITIONS} _RELEASE)
+  target_include_directories(openrbx_android PRIVATE
+    "${PROJECT_SOURCE_DIR}/Client/android"
+    "${PROJECT_SOURCE_DIR}/Client/win"
+    "${PROJECT_SOURCE_DIR}/Client/qt"
+    ${OPENRBX_ENGINE_INCLUDE_DIRS}
+    ${OPENRBX_3RDPARTY_INCLUDE_DIRS}
+  )
+  string(REPLACE ";" "," OPENRBX_ANDROID_LINK_GROUP "${OPENRBX_ENGINE_LIBRARIES}")
+  target_link_libraries(openrbx_android PRIVATE
+    "$<LINK_GROUP:RESCAN,${OPENRBX_ANDROID_LINK_GROUP}>"
+    glg3d_egl
+    graphics3d
+    glu
+    OpenAL::OpenAL
+    openmpt
+    stb_vorbis
+    CURL::libcurl
+    OpenSSL::Crypto
+    android
+    log
+    EGL
+    GLESv2
+    OpenSLES
+    Threads::Threads
+    ${CMAKE_DL_LIBS}
+    m
+  )
+  return()
+endif()
 
 add_executable(webservice
   WebService/ThumbnailGenerator.cpp

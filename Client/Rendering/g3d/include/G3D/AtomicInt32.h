@@ -78,12 +78,16 @@ public:
 
 #       elif defined(G3D_LINUX)
 
+#           if defined(__i386__) || defined(__x86_64__)
             int32 old;
             asm volatile ("lock; xaddl %0,%1"
                   : "=r"(old), "=m"(_value) /* outputs */
                   : "0"(x), "m"(_value)   /* inputs */
                   : "memory", "cc");
             return old;
+#           else
+            return __atomic_fetch_add(&_value, x, __ATOMIC_SEQ_CST);
+#           endif
             
 #       elif defined(G3D_OSX)
 			int32 prev, temp;
@@ -127,6 +131,7 @@ public:
             // Note: returns the newly decremented value
             return InterlockedDecrement(VCAST &_value) != 0;
 #       elif defined(G3D_LINUX)
+#           if defined(__i386__) || defined(__x86_64__)
             unsigned char nz;
 
             asm volatile ("lock; decl %1;\n\t"
@@ -135,6 +140,9 @@ public:
                           : "m" (_value)
                           : "memory", "cc");
             return nz;
+#           else
+            return __atomic_sub_fetch(&_value, 1, __ATOMIC_SEQ_CST) != 0;
+#           endif
 #       elif defined(G3D_OSX)
 			// Note: add returns the old value. We will only be 0, if we were 1 prior to this.
             return add(-1) != 1;
@@ -163,12 +171,18 @@ public:
                 return InterlockedCompareExchange(VCAST &_value, exchange, comperand);
 #          endif
 #       elif defined(G3D_LINUX)
+#           if defined(__i386__) || defined(__x86_64__)
             int32 ret;
             asm volatile ("lock; cmpxchgl %1, %2"
                           : "=a" (ret)
                           : "r" (exchange), "m" (_value), "0"(comperand)
                           : "memory", "cc");
             return ret;
+#           else
+            int32 expected = comperand;
+            __atomic_compare_exchange_n(&_value, &expected, exchange, false, __ATOMIC_SEQ_CST, __ATOMIC_SEQ_CST);
+            return expected;
+#           endif
 #       elif defined(G3D_OSX)
 			int32 prev;
 

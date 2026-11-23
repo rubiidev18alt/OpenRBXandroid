@@ -1,0 +1,17 @@
+<resources>
+    <style name="Theme.OpenRBX" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">#D82722</item>
+        <item name="colorPrimaryVariant">#A61B17</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorSecondary">#29569B</item>
+        <item name="colorOnSecondary">#FFFFFF</item>
+        <item name="android:windowBackground">#DCE2EC</item>
+        <item name="android:statusBarColor">#A61B17</item>
+        <item name="android:navigationBarColor">#101622</item>
+    </style>
+
+    <style name="Theme.OpenRBX.Game" parent="Theme.OpenRBX">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowBackground">#000000</item>
+    </style>
+</resources>

@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#DCE2EC">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="#D82722"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="14dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnBackAvatar"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:text="Back"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            android:textColor="#1F2B3D"
+            android:background="@drawable/bg_retro_2007_slot"
+            android:paddingHorizontal="12dp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="12dp"
+            android:text="@string/avatar_title"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnSaveAvatar"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:text="@string/save_avatar"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/bg_retro_2007_button"
+            android:paddingHorizontal="12dp" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Classic 2007 Quick Presets -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2007 Classic Presets"
+                android:textColor="#1F2B3D"
+                android:textStyle="bold"
+                android:textSize="13sp"
+                android:layout_marginBottom="6dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="14dp">
+
+                <Button
+                    android:id="@+id/btnPresetNoob"
+                    android:layout_width="0dp"
+                    android:layout_height="36dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="6dp"
+                    android:text="Noob"
+                    android:textAllCaps="false"
+                    android:textColor="#1F2B3D"
+                    android:background="@drawable/bg_retro_2007_slot" />
+
+                <Button
+                    android:id="@+id/btnPresetBloxxer"
+                    android:layout_width="0dp"
+                    android:layout_height="36dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="6dp"
+                    android:text="Bloxxer"
+                    android:textAllCaps="false"
+                    android:textColor="#1F2B3D"
+                    android:background="@drawable/bg_retro_2007_slot" />
+
+                <Button
+                    android:id="@+id/btnPresetGuest"
+                    android:layout_width="0dp"
+                    android:layout_height="36dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="6dp"
+                    android:text="Guest"
+                    android:textAllCaps="false"
+                    android:textColor="#1F2B3D"
+                    android:background="@drawable/bg_retro_2007_slot" />
+
+                <Button
+                    android:id="@+id/btnPresetBuilder"
+                    android:layout_width="0dp"
+                    android:layout_height="36dp"
+                    android:layout_weight="1"
+                    android:text="Builder"
+                    android:textAllCaps="false"
+                    android:textColor="#1F2B3D"
+                    android:background="@drawable/bg_retro_2007_slot" />
+            </LinearLayout>
+
+            <!-- Live R6 Blocky Preview -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="18dp"
+                android:background="@drawable/bg_retro_2007_panel"
+                android:layout_marginBottom="14dp">
+
+                <View
+                    android:id="@+id/previewHead"
+                    android:layout_width="44dp"
+                    android:layout_height="40dp"
+                    android:layout_marginBottom="4dp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="4dp">
+
+                    <View
+                        android:id="@+id/previewLeftArm"
+                        android:layout_width="28dp"
+                        android:layout_height="68dp"
+                        android:layout_marginEnd="4dp" />
+
+                    <View
+                        android:id="@+id/previewTorso"
+                        android:layout_width="60dp"
+                        android:layout_height="68dp"
+                        android:layout_marginEnd="4dp" />
+
+                    <View
+                        android:id="@+id/previewRightArm"
+                        android:layout_width="28dp"
+                        android:layout_height="68dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:id="@+id/previewLeftLeg"
+                        android:layout_width="28dp"
+                        android:layout_height="68dp"
+                        android:layout_marginEnd="4dp" />
+
+                    <View
+                        android:id="@+id/previewRightLeg"
+                        android:layout_width="28dp"
+                        android:layout_height="68dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/etPlayerName"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:hint="@string/player_name_hint"
+                android:textColor="#1F2B3D"
+                android:textColorHint="#6E7B8F"
+                android:background="#FFFFFF"
+                android:paddingHorizontal="14dp"
+                android:layout_marginBottom="14dp"
+                android:singleLine="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Body Part"
+                android:textColor="#1F2B3D"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp">
+
+                <LinearLayout
+                    android:id="@+id/bodyPartTabs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+            </HorizontalScrollView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="BrickColor Palette"
+                android:textColor="#1F2B3D"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <GridLayout
+                android:id="@+id/colorPaletteGrid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="4"
+                android:layout_marginBottom="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2007 Face"
+                android:textColor="#1F2B3D"
+                android:textStyle="bold"
+                android:layout_marginBottom="6dp" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp">
+                <LinearLayout
+                    android:id="@+id/faceChoicesRow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+            </HorizontalScrollView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Classic T-Shirt"
+                android:textColor="#1F2B3D"
+                android:textStyle="bold"
+                android:layout_marginBottom="6dp" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp">
+                <LinearLayout
+                    android:id="@+id/shirtChoicesRow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+            </HorizontalScrollView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hat / Accessory"
+                android:textColor="#1F2B3D"
+                android:textStyle="bold"
+                android:layout_marginBottom="6dp" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp">
+                <LinearLayout
+                    android:id="@+id/hatChoicesRow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+            </HorizontalScrollView>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

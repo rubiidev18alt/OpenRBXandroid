@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">OpenRBX 2007</string>
+    <string name="subtitle">Classic 2007 Engine • Modern Mobile</string>
+    <string name="play_crossroads">Play Crossroads (2007)</string>
+    <string name="play_happy_home">Play Happy Home</string>
+    <string name="play_baseplate">Play Classic Baseplate</string>
+    <string name="open_rbxl">Import .RBXL File</string>
+    <string name="customize_avatar">Character</string>
+    <string name="recent_places">Recent Places</string>
+    <string name="no_recent_places">No custom .rbxl files imported yet.</string>
+    <string name="avatar_title">Character Customizer</string>
+    <string name="save_avatar">Save Character</string>
+    <string name="player_name_hint">Bloxxer Name</string>
+    <string name="respawn">Reset</string>
+    <string name="leave_game">Exit</string>
+    <string name="lua_cmd_hint">Run Lua (e.g. game.Workspace.Base.BrickColor = BrickColor.new(21))</string>
+    <string name="run_lua">Exec</string>
+</resources>

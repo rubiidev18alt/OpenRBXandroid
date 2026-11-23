@@ -15,6 +15,10 @@ class CRobloxWnd;
 class RobloxWindow;
 class ThumbnailGenerator;
 
+namespace RBX::Android {
+class AndroidEngine;
+}
+
 namespace RBX::Render {
 
 class Chunk;
@@ -55,6 +59,7 @@ private:
 	friend class ::CRobloxWnd;
 	friend class ::RobloxWindow;
 	friend class ::ThumbnailGenerator;
+	friend class RBX::Android::AndroidEngine;
 
 	static G3D::MeshAlg::Geometry visibleGeometry;
 	static G3D::Array<G3D::Vector2> texCoordArray;

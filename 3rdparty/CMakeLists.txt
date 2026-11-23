@@ -1,3 +1,4 @@
+if (NOT ANDROID)
 set(OPENRBX_QTBASE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/qtbase")
 set(OPENRBX_QTBASE_BINARY_DIR "${CMAKE_BINARY_DIR}/3rdparty/qtbase-build")
 set(OPENRBX_QTBASE_PREFIX "${OPENRBX_QTBASE_BINARY_DIR}/install")
@@ -93,12 +94,21 @@ endif()
 
 list(APPEND CMAKE_PREFIX_PATH "${OPENRBX_QTBASE_PREFIX}")
 set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH}" PARENT_SCOPE)
+endif() # NOT ANDROID
 
 foreach(option ALSOFT_UTILS ALSOFT_EXAMPLES ALSOFT_INSTALL ALSOFT_INSTALL_CONFIG ALSOFT_INSTALL_HRTF_DATA
                ALSOFT_INSTALL_AMBDEC_PRESETS ALSOFT_INSTALL_EXAMPLES ALSOFT_INSTALL_UTILS ALSOFT_UPDATE_BUILD_VERSION)
   set(${option} OFF CACHE BOOL "" FORCE)
 endforeach()
-if (NOT WIN32)
+if (ANDROID)
+  foreach(option ALSOFT_BACKEND_OSS ALSOFT_BACKEND_JACK ALSOFT_BACKEND_PORTAUDIO ALSOFT_BACKEND_SNDIO
+                 ALSOFT_BACKEND_SOLARIS ALSOFT_BACKEND_ALSA ALSOFT_BACKEND_PULSEAUDIO ALSOFT_BACKEND_PIPEWIRE
+                 ALSOFT_REQUIRE_PIPEWIRE ALSOFT_REQUIRE_PULSEAUDIO ALSOFT_REQUIRE_ALSA)
+    set(${option} OFF CACHE BOOL "" FORCE)
+  endforeach()
+  set(ALSOFT_BACKEND_OPENSL ON CACHE BOOL "" FORCE)
+  set(ALSOFT_REQUIRE_OPENSL ON CACHE BOOL "" FORCE)
+elseif (NOT WIN32)
   foreach(option ALSOFT_BACKEND_OSS ALSOFT_BACKEND_JACK ALSOFT_BACKEND_PORTAUDIO ALSOFT_BACKEND_SNDIO
                  ALSOFT_BACKEND_SOLARIS)
     set(${option} OFF CACHE BOOL "" FORCE)
@@ -108,10 +118,12 @@ if (NOT WIN32)
   endforeach()
 endif()
 add_subdirectory(openal-soft EXCLUDE_FROM_ALL)
-set_target_properties(OpenAL PROPERTIES
-  RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}"
-  LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}"
-)
+if (NOT ANDROID)
+  set_target_properties(OpenAL PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}"
+    LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}"
+  )
+endif()
 
 set(LIBOPENMPT "${CMAKE_CURRENT_SOURCE_DIR}/libopenmpt")
 file(GLOB OPENRBX_LIBOPENMPT_SOURCES
@@ -154,13 +166,20 @@ file(GLOB OPENRBX_GRAPHICS3D_SOURCES "${G3D}/g3dcpp/*.cpp" "${G3D}/IJG/*.c" "${G
 file(GLOB OPENRBX_GLG3D_SOURCES "${G3D}/glg3dcpp/*.cpp")
 
 add_library(graphics3d STATIC ${OPENRBX_GRAPHICS3D_SOURCES})
-add_library(glg3d STATIC ${OPENRBX_GLG3D_SOURCES})
 add_library(glg3d_egl STATIC ${OPENRBX_GLG3D_SOURCES})
 target_compile_definitions(glg3d_egl PRIVATE G3D_EGL)
+if (ANDROID)
+  target_compile_definitions(graphics3d PRIVATE PNG_NO_MMX_CODE G3D_GLES_COMPAT)
+  target_compile_definitions(glg3d_egl PUBLIC G3D_EGL G3D_GLES_COMPAT)
+endif()
 target_link_libraries(glg3d_egl PUBLIC egl)
-set(OPENRBX_G3D_TARGETS graphics3d glg3d glg3d_egl)
-if (NOT WIN32)
-  target_link_libraries(glg3d PUBLIC OpenGL::GL X11::X11)
+set(OPENRBX_G3D_TARGETS graphics3d glg3d_egl)
+if (NOT ANDROID)
+  add_library(glg3d STATIC ${OPENRBX_GLG3D_SOURCES})
+  list(APPEND OPENRBX_G3D_TARGETS glg3d)
+  if (NOT WIN32)
+    target_link_libraries(glg3d PUBLIC OpenGL::GL X11::X11)
+  endif()
 endif()
 
 foreach(name ${OPENRBX_G3D_TARGETS})
@@ -222,6 +241,8 @@ if (WIN32)
 
   target_include_directories(egl INTERFACE "${OPENRBX_MESA_SOURCE_DIR}/include")
   target_link_libraries(egl INTERFACE "${OPENRBX_MESA_PREFIX}/lib/libEGL.lib" "${OPENRBX_MESA_PREFIX}/lib/opengl32.lib")
+elseif (ANDROID)
+  target_link_libraries(egl INTERFACE EGL GLESv2)
 else()
   target_link_libraries(egl INTERFACE OpenGL::EGL OpenGL::OpenGL)
 endif()
@@ -238,6 +259,10 @@ if (WIN32)
 else()
   add_library(glu STATIC ${OPENRBX_GLU_SOURCES})
   set_target_properties(glu PROPERTIES POSITION_INDEPENDENT_CODE ON)
+  if (ANDROID)
+    target_include_directories(glu BEFORE PRIVATE "${G3D}/include")
+    target_compile_definitions(glu PRIVATE G3D_GLES_COMPAT G3D_EGL G3D_DEBUG_NOGUI)
+  endif()
 endif()
 target_include_directories(glu PRIVATE
   "${GLU}/src/include" "${GLU}/src/libnurbs/interface" "${GLU}/src/libnurbs/internals" "${GLU}/src/libnurbs/nurbtess"
@@ -562,6 +587,7 @@ set(OPENRBX_FREETYPE_SOURCES
   "${FREETYPE}/src/winfonts/winfnt.c"
 )
 
+if (NOT ANDROID)
 foreach(option SDL_SHARED SDL_TEST_LIBRARY SDL_TESTS SDL_EXAMPLES SDL_INSTALL SDL_UNINSTALL
                SDL_AUDIO SDL_GPU SDL_RENDER SDL_CAMERA SDL_JOYSTICK SDL_HAPTIC SDL_HIDAPI SDL_POWER SDL_SENSOR
                SDL_DIALOG SDL_TRAY SDL_WAYLAND SDL_KMSDRM SDL_VULKAN SDL_OPENGLES SDL_OFFSCREEN SDL_PIPEWIRE
@@ -570,6 +596,7 @@ foreach(option SDL_SHARED SDL_TEST_LIBRARY SDL_TESTS SDL_EXAMPLES SDL_INSTALL SD
 endforeach()
 set(SDL_STATIC ON CACHE BOOL "" FORCE)
 add_subdirectory(SDL3 EXCLUDE_FROM_ALL)
+endif()
 
 find_package(Perl REQUIRED)
 
@@ -581,9 +608,39 @@ endif()
 
 if (NOT EXISTS "${OPENRBX_OPENSSL_PREFIX}/include/openssl/ssl.h")
   message(STATUS "Building OpenSSL in ${OPENRBX_OPENSSL_BINARY_DIR}")
+  set(OPENRBX_OPENSSL_ENV_ARGS)
   if (WIN32)
     set(OPENRBX_OPENSSL_TARGET VC-WIN64A no-asm)
     set(OPENRBX_OPENSSL_MAKE nmake)
+  elseif (ANDROID)
+    cmake_host_system_information(RESULT OPENRBX_JOBS QUERY NUMBER_OF_LOGICAL_CORES)
+    if (CMAKE_ANDROID_ARCH_ABI STREQUAL "arm64-v8a")
+      set(OPENRBX_OPENSSL_ARCH android-arm64)
+    elseif (CMAKE_ANDROID_ARCH_ABI STREQUAL "armeabi-v7a")
+      set(OPENRBX_OPENSSL_ARCH android-arm)
+    elseif (CMAKE_ANDROID_ARCH_ABI STREQUAL "x86_64")
+      set(OPENRBX_OPENSSL_ARCH android-x86_64)
+    elseif (CMAKE_ANDROID_ARCH_ABI STREQUAL "x86")
+      set(OPENRBX_OPENSSL_ARCH android-x86)
+    else()
+      message(FATAL_ERROR "Unsupported Android ABI for OpenSSL: ${CMAKE_ANDROID_ARCH_ABI}")
+    endif()
+    set(OPENRBX_ANDROID_API "${CMAKE_SYSTEM_VERSION}")
+    if (NOT OPENRBX_ANDROID_API)
+      set(OPENRBX_ANDROID_API 24)
+    endif()
+    get_filename_component(OPENRBX_NDK_BIN_DIR "${CMAKE_C_COMPILER}" DIRECTORY)
+    set(OPENRBX_NDK_ROOT "${CMAKE_ANDROID_NDK}")
+    if (NOT OPENRBX_NDK_ROOT)
+      set(OPENRBX_NDK_ROOT "$ENV{ANDROID_NDK_ROOT}")
+    endif()
+    set(OPENRBX_OPENSSL_TARGET ${OPENRBX_OPENSSL_ARCH} -D__ANDROID_API__=${OPENRBX_ANDROID_API})
+    set(OPENRBX_OPENSSL_ENV_ARGS
+      "${CMAKE_COMMAND}" -E env
+      "ANDROID_NDK_ROOT=${OPENRBX_NDK_ROOT}"
+      "PATH=${OPENRBX_NDK_BIN_DIR}:$ENV{PATH}"
+    )
+    set(OPENRBX_OPENSSL_MAKE make -j${OPENRBX_JOBS})
   else()
     cmake_host_system_information(RESULT OPENRBX_JOBS QUERY NUMBER_OF_LOGICAL_CORES)
     set(OPENRBX_OPENSSL_TARGET)
@@ -591,19 +648,28 @@ if (NOT EXISTS "${OPENRBX_OPENSSL_PREFIX}/include/openssl/ssl.h")
   endif()
   file(MAKE_DIRECTORY "${OPENRBX_OPENSSL_BINARY_DIR}")
   execute_process(
-    COMMAND "${PERL_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/openssl/Configure" ${OPENRBX_OPENSSL_TARGET}
-            no-shared no-tests no-docs no-apps "--prefix=${OPENRBX_OPENSSL_PREFIX}" --libdir=lib
+    COMMAND ${OPENRBX_OPENSSL_ENV_ARGS} "${PERL_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/openssl/Configure"
+            ${OPENRBX_OPENSSL_TARGET} no-shared no-tests no-docs no-apps
+            "--prefix=${OPENRBX_OPENSSL_PREFIX}" --libdir=lib
     WORKING_DIRECTORY "${OPENRBX_OPENSSL_BINARY_DIR}"
     RESULT_VARIABLE result
   )
   if (NOT result EQUAL 0)
     message(FATAL_ERROR "OpenSSL configure failed")
   endif()
-  execute_process(COMMAND ${OPENRBX_OPENSSL_MAKE} build_libs WORKING_DIRECTORY "${OPENRBX_OPENSSL_BINARY_DIR}" RESULT_VARIABLE result)
+  execute_process(
+    COMMAND ${OPENRBX_OPENSSL_ENV_ARGS} ${OPENRBX_OPENSSL_MAKE} build_libs
+    WORKING_DIRECTORY "${OPENRBX_OPENSSL_BINARY_DIR}"
+    RESULT_VARIABLE result
+  )
   if (NOT result EQUAL 0)
     message(FATAL_ERROR "OpenSSL build failed")
   endif()
-  execute_process(COMMAND ${OPENRBX_OPENSSL_MAKE} install_dev WORKING_DIRECTORY "${OPENRBX_OPENSSL_BINARY_DIR}" RESULT_VARIABLE result)
+  execute_process(
+    COMMAND ${OPENRBX_OPENSSL_ENV_ARGS} ${OPENRBX_OPENSSL_MAKE} install_dev
+    WORKING_DIRECTORY "${OPENRBX_OPENSSL_BINARY_DIR}"
+    RESULT_VARIABLE result
+  )
   if (NOT result EQUAL 0)
     message(FATAL_ERROR "OpenSSL install failed")
   endif()
@@ -614,6 +680,17 @@ set(OPENRBX_CURL_PREFIX "${OPENRBX_CURL_BINARY_DIR}/install")
 
 if (NOT EXISTS "${OPENRBX_CURL_PREFIX}/lib/cmake/CURL/CURLConfig.cmake")
   message(STATUS "Building curl in ${OPENRBX_CURL_BINARY_DIR}")
+  set(OPENRBX_CURL_EXTRA_ARGS)
+  if (ANDROID)
+    list(APPEND OPENRBX_CURL_EXTRA_ARGS
+      -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
+      -DANDROID_ABI=${CMAKE_ANDROID_ARCH_ABI}
+      -DANDROID_PLATFORM=android-${CMAKE_SYSTEM_VERSION}
+      -DOPENSSL_INCLUDE_DIR=${OPENRBX_OPENSSL_PREFIX}/include
+      -DOPENSSL_SSL_LIBRARY=${OPENRBX_OPENSSL_PREFIX}/lib/libssl.a
+      -DOPENSSL_CRYPTO_LIBRARY=${OPENRBX_OPENSSL_PREFIX}/lib/libcrypto.a
+    )
+  endif()
   execute_process(
     COMMAND "${CMAKE_COMMAND}" -S "${CMAKE_CURRENT_SOURCE_DIR}/curl" -B "${OPENRBX_CURL_BINARY_DIR}" -G Ninja
             -DCMAKE_BUILD_TYPE=Release
@@ -643,6 +720,7 @@ if (NOT EXISTS "${OPENRBX_CURL_PREFIX}/lib/cmake/CURL/CURLConfig.cmake")
             -DCURL_USE_LIBPSL=OFF
             -DCURL_USE_LIBSSH2=OFF
             -DCURL_DISABLE_LDAP=ON
+            ${OPENRBX_CURL_EXTRA_ARGS}
     RESULT_VARIABLE result
   )
   if (NOT result EQUAL 0)
@@ -661,9 +739,18 @@ endif()
 set(CMAKE_FIND_PACKAGE_TARGETS_GLOBAL ON)
 set(OPENSSL_ROOT_DIR "${OPENRBX_OPENSSL_PREFIX}")
 set(OPENSSL_USE_STATIC_LIBS ON)
+if (ANDROID)
+  set(OPENSSL_INCLUDE_DIR "${OPENRBX_OPENSSL_PREFIX}/include")
+  set(OPENSSL_SSL_LIBRARY "${OPENRBX_OPENSSL_PREFIX}/lib/libssl.a")
+  set(OPENSSL_CRYPTO_LIBRARY "${OPENRBX_OPENSSL_PREFIX}/lib/libcrypto.a")
+endif()
 find_package(OpenSSL REQUIRED)
 find_package(CURL REQUIRED CONFIG PATHS "${OPENRBX_CURL_PREFIX}" NO_DEFAULT_PATH)
 set(CMAKE_FIND_PACKAGE_TARGETS_GLOBAL OFF)
+
+if (ANDROID)
+  return()
+endif()
 
 if (NOT WIN32)
   set(OPENRBX_OGRE_LINUX_DEFINITIONS NDEBUG OGRE_GUI_GLX ZZIP_OMIT_CONFIG_H _LARGEFILE64_SOURCE XTSTRINGDEFINES)

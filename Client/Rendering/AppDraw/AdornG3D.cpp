@@ -132,6 +132,9 @@ void AdornG3D::setTexture(int id, G3D::ReferenceCountedPointer<TextureProxyBase>
 G3D::Vector2 AdornG3D::get2DStringBounds(const std::string& s, double size, Spacing spacing) const
 {
 	G3D::ReferenceCountedPointer<G3D::GFont> font = Fonts::getFont();
+	if (font.isNull()) {
+		return G3D::Vector2(static_cast<float>(s.size() * size * 0.55), static_cast<float>(size * 1.2));
+	}
 
 	return font->get2DStringBounds(s, size, (G3D::GFont::Spacing) spacing);
 }
@@ -148,6 +151,9 @@ G3D::Vector2 AdornG3D::drawFont2D(
 ) const
 {
 	G3D::ReferenceCountedPointer<G3D::GFont> font = Fonts::getFont();
+	if (font.isNull()) {
+		return G3D::Vector2::zero();
+	}
 
 	return font->draw2D(
 		renderDevice,

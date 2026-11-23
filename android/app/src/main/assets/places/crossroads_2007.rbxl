@@ -1,0 +1,389 @@
+<roblox version="4">
+  <Item class="Workspace">
+    <Properties><string name="Name">Workspace</string></Properties>
+        <Item class="Part">
+      <Properties>
+        <string name="Name">Base</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <int name="BrickColor">28</int>
+        <float name="Transparency">0.0</float>
+        <token name="shape">1</token>
+        <CoordinateFrame name="CFrame">
+          <X>0</X><Y>0</Y><Z>0</Z>
+          <R00>1</R00><R01>0</R01><R02>0</R02>
+          <R10>0</R10><R11>1</R11><R12>0</R12>
+          <R20>0</R20><R21>0</R21><R22>1</R22>
+        </CoordinateFrame>
+        <Vector3 name="size"><X>260</X><Y>2</Y><Z>260</Z></Vector3>
+      </Properties>
+    </Item>
+
+        <Item class="Part">
+      <Properties>
+        <string name="Name">RoadNS</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <int name="BrickColor">199</int>
+        <float name="Transparency">0.0</float>
+        <token name="shape">1</token>
+        <CoordinateFrame name="CFrame">
+          <X>0</X><Y>1.05</Y><Z>0</Z>
+          <R00>1</R00><R01>0</R01><R02>0</R02>
+          <R10>0</R10><R11>1</R11><R12>0</R12>
+          <R20>0</R20><R21>0</R21><R22>1</R22>
+        </CoordinateFrame>
+        <Vector3 name="size"><X>18</X><Y>0.2</Y><Z>250</Z></Vector3>
+      </Properties>
+    </Item>
+
+        <Item class="Part">
+      <Properties>
+        <string name="Name">RoadEW</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <int name="BrickColor">199</int>
+        <float name="Transparency">0.0</float>
+        <token name="shape">1</token>
+        <CoordinateFrame name="CFrame">
+          <X>0</X><Y>1.05</Y><Z>0</Z>
+          <R00>1</R00><R01>0</R01><R02>0</R02>
+          <R10>0</R10><R11>1</R11><R12>0</R12>
+          <R20>0</R20><R21>0</R21><R22>1</R22>
+        </CoordinateFrame>
+        <Vector3 name="size"><X>250</X><Y>0.2</Y><Z>18</Z></Vector3>
+      </Properties>
+    </Item>
+
+        <Item class="Part">
+      <Properties>
+        <string name="Name">CenterRing</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <int name="BrickColor">21</int>
+        <float name="Transparency">0.0</float>
+        <token name="shape">1</token>
+        <CoordinateFrame name="CFrame">
+          <X>0</X><Y>1.2</Y><Z>0</Z>
+          <R00>1</R00><R01>0</R01><R02>0</R02>
+          <R10>0</R10><R11>1</R11><R12>0</R12>
+          <R20>0</R20><R21>0</R21><R22>1</R22>
+        </CoordinateFrame>
+        <Vector3 name="size"><X>26</X><Y>0.4</Y><Z>26</Z></Vector3>
+      </Properties>
+    </Item>
+
+        <Item class="Part">
+      <Properties>
+        <string name="Name">CenterPad</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <int name="BrickColor">26</int>
+        <float name="Transparency">0.0</float>
+        <token name="shape">1</token>
+        <CoordinateFrame name="CFrame">
+          <X>0</X><Y>1.4</Y><Z>0</Z>
+          <R00>1</R00><R01>0</R01><R02>0</R02>
+          <R10>0</R10><R11>1</R11><R12>0</R12>
+          <R20>0</R20><R21>0</R21><R22>1</R22>
+        </CoordinateFrame>
+        <Vector3 name="size"><X>16</X><Y>0.4</Y><Z>16</Z></Vector3>
+      </Properties>
+    </Item>
+
+    <Item class="SpawnLocation">
+      <Properties>
+        <string name="Name">SpawnLocation</string>
+        <bool name="Anchored">true</bool>
+        <int name="BrickColor">24</int>
+        <CoordinateFrame name="CFrame">
+          <X>0</X><Y>1.8</Y><Z>38</Z>
+          <R00>1</R00><R01>0</R01><R02>0</R02>
+          <R10>0</R10><R11>1</R11><R12>0</R12>
+          <R20>0</R20><R21>0</R21><R22>1</R22>
+        </CoordinateFrame>
+        <Vector3 name="size"><X>8</X><Y>1</Y><Z>8</Z></Vector3>
+      </Properties>
+    </Item>
+    <Item class="Model">
+      <Properties><string name="Name">BlackrockFort</string></Properties>
+          <Item class="Part">
+      <Properties>
+        <string name="Name">FortFloor</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <int name="BrickColor">194</int>
+        <float name="Transparency">0.0</float>
+        <token name="shape">1</token>
+        <CoordinateFrame name="CFrame">
+          <X>-46</X><Y>2</Y><Z>-46</Z>
+          <R00>1</R00><R01>0</R01><R02>0</R02>
+          <R10>0</R10><R11>1</R11><R12>0</R12>
+          <R20>0</R20><R21>0</R21><R22>1</R22>
+        </CoordinateFrame>
+        <Vector3 name="size"><X>36</X><Y>2</Y><Z>36</Z></Vector3>
+      </Properties>
+    </Item>
+
+          <Item class="Part">
+      <Properties>
+        <string name="Name">WallN</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <int name="BrickColor">199</int>
+        <float name="Transparency">0.0</float>
+        <token name="shape">1</token>
+        <CoordinateFrame name="CFrame">
+          <X>-46</X><Y>9</Y><Z>-63</Z>
+          <R00>1</R00><R01>0</R01><R02>0</R02>
+          <R10>0</R10><R11>1</R11><R12>0</R12>
+          <R20>0</R20><R21>0</R21><R22>1</R22>
+        </CoordinateFrame>
+        <Vector3 name="size"><X>36</X><Y>12</Y><Z>3</Z></Vector3>
+      </Properties>
+    </Item>
+
+          <Item class="Part">
+      <Properties>
+        <string name="Name">WallW</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <int name="BrickColor">199</int>
+        <float name="Transparency">0.0</float>
+        <token name="shape">1</token>
+        <CoordinateFrame name="CFrame">
+          <X>-63</X><Y>9</Y><Z>-46</Z>
+          <R00>1</R00><R01>0</R01><R02>0</R02>
+          <R10>0</R10><R11>1</R11><R12>0</R12>
+          <R20>0</R20><R21>0</R21><R22>1</R22>
+        </CoordinateFrame>
+        <Vector3 name="size"><X>3</X><Y>12</Y><Z>36</Z></Vector3>
+      </Properties>
+    </Item>
+
+          <Item class="Part">
+      <Properties>
+        <string name="Name">TowerNE</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <int name="BrickColor">26</int>
+        <float name="Transparency">0.0</float>
+        <token name="shape">1</token>
+        <CoordinateFrame name="CFrame">
+          <X>-30</X><Y>14</Y><Z>-62</Z>
+          <R00>1</R00><R01>0</R01><R02>0</R02>
+          <R10>0</R10><R11>1</R11><R12>0</R12>
+          <R20>0</R20><R21>0</R21><R22>1</R22>
+        </CoordinateFrame>
+        <Vector3 name="size"><X>8</X><Y>24</Y><Z>8</Z></Vector3>
+      </Properties>
+    </Item>
+
+          <Item class="Part">
+      <Properties>
+        <string name="Name">FortBanner</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <int name="BrickColor">21</int>
+        <float name="Transparency">0.0</float>
+        <token name="shape">1</token>
+        <CoordinateFrame name="CFrame">
+          <X>-30</X><Y>28</Y><Z>-62</Z>
+          <R00>1</R00><R01>0</R01><R02>0</R02>
+          <R10>0</R10><R11>1</R11><R12>0</R12>
+          <R20>0</R20><R21>0</R21><R22>1</R22>
+        </CoordinateFrame>
+        <Vector3 name="size"><X>10</X><Y>4</Y><Z>4</Z></Vector3>
+      </Properties>
+    </Item>
+
+    </Item>
+    <Item class="Model">
+      <Properties><string name="Name">BridgeAndTowers</string></Properties>
+          <Item class="Part">
+      <Properties>
+        <string name="Name">Stair1</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <int name="BrickColor">106</int>
+        <float name="Transparency">0.0</float>
+        <token name="shape">1</token>
+        <CoordinateFrame name="CFrame">
+          <X>26</X><Y>2.5</Y><Z>-24</Z>
+          <R00>1</R00><R01>0</R01><R02>0</R02>
+          <R10>0</R10><R11>1</R11><R12>0</R12>
+          <R20>0</R20><R21>0</R21><R22>1</R22>
+        </CoordinateFrame>
+        <Vector3 name="size"><X>10</X><Y>3</Y><Z>8</Z></Vector3>
+      </Properties>
+    </Item>
+
+          <Item class="Part">
+      <Properties>
+        <string name="Name">Stair2</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <int name="BrickColor">106</int>
+        <float name="Transparency">0.0</float>
+        <token name="shape">1</token>
+        <CoordinateFrame name="CFrame">
+          <X>26</X><Y>5.5</Y><Z>-32</Z>
+          <R00>1</R00><R01>0</R01><R02>0</R02>
+          <R10>0</R10><R11>1</R11><R12>0</R12>
+          <R20>0</R20><R21>0</R21><R22>1</R22>
+        </CoordinateFrame>
+        <Vector3 name="size"><X>10</X><Y>3</Y><Z>8</Z></Vector3>
+      </Properties>
+    </Item>
+
+          <Item class="Part">
+      <Properties>
+        <string name="Name">Stair3</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <int name="BrickColor">106</int>
+        <float name="Transparency">0.0</float>
+        <token name="shape">1</token>
+        <CoordinateFrame name="CFrame">
+          <X>26</X><Y>8.5</Y><Z>-40</Z>
+          <R00>1</R00><R01>0</R01><R02>0</R02>
+          <R10>0</R10><R11>1</R11><R12>0</R12>
+          <R20>0</R20><R21>0</R21><R22>1</R22>
+        </CoordinateFrame>
+        <Vector3 name="size"><X>10</X><Y>3</Y><Z>8</Z></Vector3>
+      </Properties>
+    </Item>
+
+          <Item class="Part">
+      <Properties>
+        <string name="Name">SkyBridge</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <int name="BrickColor">23</int>
+        <float name="Transparency">0.0</float>
+        <token name="shape">1</token>
+        <CoordinateFrame name="CFrame">
+          <X>0</X><Y>10.5</Y><Z>-42</Z>
+          <R00>1</R00><R01>0</R01><R02>0</R02>
+          <R10>0</R10><R11>1</R11><R12>0</R12>
+          <R20>0</R20><R21>0</R21><R22>1</R22>
+        </CoordinateFrame>
+        <Vector3 name="size"><X>56</X><Y>1.5</Y><Z>8</Z></Vector3>
+      </Properties>
+    </Item>
+
+          <Item class="Part">
+      <Properties>
+        <string name="Name">LooseCrate1</string>
+        <bool name="Anchored">false</bool>
+        <bool name="CanCollide">true</bool>
+        <int name="BrickColor">22</int>
+        <float name="Transparency">0.0</float>
+        <token name="shape">1</token>
+        <CoordinateFrame name="CFrame">
+          <X>14</X><Y>3</Y><Z>14</Z>
+          <R00>1</R00><R01>0</R01><R02>0</R02>
+          <R10>0</R10><R11>1</R11><R12>0</R12>
+          <R20>0</R20><R21>0</R21><R22>1</R22>
+        </CoordinateFrame>
+        <Vector3 name="size"><X>4</X><Y>4</Y><Z>4</Z></Vector3>
+      </Properties>
+    </Item>
+
+          <Item class="Part">
+      <Properties>
+        <string name="Name">LooseCrate2</string>
+        <bool name="Anchored">false</bool>
+        <bool name="CanCollide">true</bool>
+        <int name="BrickColor">22</int>
+        <float name="Transparency">0.0</float>
+        <token name="shape">1</token>
+        <CoordinateFrame name="CFrame">
+          <X>-14</X><Y>3</Y><Z>14</Z>
+          <R00>1</R00><R01>0</R01><R02>0</R02>
+          <R10>0</R10><R11>1</R11><R12>0</R12>
+          <R20>0</R20><R21>0</R21><R22>1</R22>
+        </CoordinateFrame>
+        <Vector3 name="size"><X>4</X><Y>4</Y><Z>4</Z></Vector3>
+      </Properties>
+    </Item>
+
+          <Item class="Part">
+      <Properties>
+        <string name="Name">SuperSphere</string>
+        <bool name="Anchored">false</bool>
+        <bool name="CanCollide">true</bool>
+        <int name="BrickColor">24</int>
+        <float name="Transparency">0.0</float>
+        <token name="shape">0</token>
+        <CoordinateFrame name="CFrame">
+          <X>0</X><Y>5</Y><Z>-14</Z>
+          <R00>1</R00><R01>0</R01><R02>0</R02>
+          <R10>0</R10><R11>1</R11><R12>0</R12>
+          <R20>0</R20><R21>0</R21><R22>1</R22>
+        </CoordinateFrame>
+        <Vector3 name="size"><X>5</X><Y>5</Y><Z>5</Z></Vector3>
+      </Properties>
+    </Item>
+
+    </Item>
+  </Item>
+  <Item class="StarterPack">
+    <Properties>
+      <string name="Name">StarterPack</string>
+    </Properties>
+    <Item class="HopperBin">
+      <Properties>
+        <string name="Name">Slingshot</string>
+        <token name="BinType">5</token>
+      </Properties>
+    </Item>
+    <Item class="HopperBin">
+      <Properties>
+        <string name="Name">Rocket</string>
+        <token name="BinType">6</token>
+      </Properties>
+    </Item>
+    <Item class="HopperBin">
+      <Properties>
+        <string name="Name">Laser</string>
+        <token name="BinType">7</token>
+      </Properties>
+    </Item>
+    <Item class="HopperBin">
+      <Properties>
+        <string name="Name">Hammer</string>
+        <token name="BinType">4</token>
+      </Properties>
+    </Item>
+    <Item class="HopperBin">
+      <Properties>
+        <string name="Name">Clone</string>
+        <token name="BinType">3</token>
+      </Properties>
+    </Item>
+    <Item class="HopperBin">
+      <Properties>
+        <string name="Name">Grab</string>
+        <token name="BinType">2</token>
+      </Properties>
+    </Item>
+  </Item>
+  <Item class="Lighting">
+    <Properties>
+      <string name="Name">Lighting</string>
+      <string name="TimeOfDay">14:00:00</string>
+    </Properties>
+    <Item class="Sky">
+      <Properties>
+        <string name="Name">Sky</string>
+        <Content name="SkyboxUp"><url>rbxasset://Sky/sky2007_up.png</url></Content>
+        <Content name="SkyboxDn"><url>rbxasset://Sky/sky2007_dn.png</url></Content>
+        <Content name="SkyboxLf"><url>rbxasset://Sky/sky2007_lf.png</url></Content>
+        <Content name="SkyboxRt"><url>rbxasset://Sky/sky2007_rt.png</url></Content>
+        <Content name="SkyboxFt"><url>rbxasset://Sky/sky2007_ft.png</url></Content>
+        <Content name="SkyboxBk"><url>rbxasset://Sky/sky2007_bk.png</url></Content>
+      </Properties>
+    </Item>
+  </Item>
+</roblox>

@@ -95,6 +95,13 @@ Vector4 glGetVector4(GLenum which);
         return wglGetCurrentContext();
     }
 
+#elif defined(G3D_EGL)
+
+    typedef EGLContext GLContext;
+    inline GLContext glGetCurrentContext() {
+        return eglGetCurrentContext();
+    }
+
 #elif defined(G3D_LINUX)
 
     typedef GLXContext GLContext;

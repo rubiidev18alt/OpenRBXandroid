@@ -11,6 +11,9 @@ public:
 	static std::string getUserAppDataDirectory(bool create, const char* subDirectory);
 	static std::string getCacheDirectory(bool create);
 	static std::string getContentDirectory();
+	static void setAndroidBasePaths(
+		const std::string& filesDir, const std::string& cacheDir, const std::string& contentDir
+	);
 };
 
 } // namespace RBX

@@ -2269,4 +2269,8 @@ GLAPI void GLAPIENTRY glResizeBuffersMESA( void );
 }
 #endif
 
+#if defined(G3D_GLES_COMPAT) && !defined(G3D_GLES_COMPAT_IMPL)
+#include "GLG3D/gl_es_compat.h"
+#endif
+
 #endif /* __gl_h_ */

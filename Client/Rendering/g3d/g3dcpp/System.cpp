@@ -35,7 +35,9 @@
 #   include "G3D/RegistryUtil.h"
 
 #elif defined(G3D_LINUX) 
-    #include <cpuid.h>
+    #if defined(__i386__) || defined(__x86_64__)
+        #include <cpuid.h>
+    #endif
 
     #include <stdlib.h>
     #include <stdio.h>

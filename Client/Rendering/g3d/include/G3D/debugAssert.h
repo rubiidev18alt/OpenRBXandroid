@@ -122,8 +122,11 @@ namespace _internal {
                 #define rawBreak()  _asm { int 3 };
             #endif
         #else
-            // GCC on Windows
-            #define rawBreak() __asm__ __volatile__ ( "int $3" ); 
+            #if defined(__i386__) || defined(__x86_64__)
+                #define rawBreak() __asm__ __volatile__ ( "int $3" );
+            #else
+                #define rawBreak() __builtin_trap();
+            #endif
         #endif
     #else
         #define rawBreak() DebugStr("\pG3D: Invoking breakpoint in debugger."); /* XCode must be set to break on Debugger()/DebugStr() */

@@ -228,6 +228,77 @@ void GLCaps::loadExtensions(Log* debugLog) {
     glVersion();
     driverVersion();
 
+#ifdef G3D_GLES_COMPAT
+    glMultiTexCoord1fARB = (PFNGLMULTITEXCOORD1FARBPROC)&rbx_glMultiTexCoord1fARB;
+    glMultiTexCoord1dARB = (PFNGLMULTITEXCOORD1DARBPROC)&rbx_glMultiTexCoord1dARB;
+    glMultiTexCoord2fARB = (PFNGLMULTITEXCOORD2FARBPROC)&rbx_glMultiTexCoord2fARB;
+    glMultiTexCoord2fvARB = (PFNGLMULTITEXCOORD2FVARBPROC)&rbx_glMultiTexCoord2fvARB;
+    glMultiTexCoord2dvARB = (PFNGLMULTITEXCOORD2DVARBPROC)&rbx_glMultiTexCoord2dvARB;
+    glMultiTexCoord3fvARB = (PFNGLMULTITEXCOORD3FVARBPROC)&rbx_glMultiTexCoord3fvARB;
+    glMultiTexCoord3dvARB = (PFNGLMULTITEXCOORD3DVARBPROC)&rbx_glMultiTexCoord3dvARB;
+    glMultiTexCoord4fvARB = (PFNGLMULTITEXCOORD4FVARBPROC)&rbx_glMultiTexCoord4fvARB;
+    glMultiTexCoord4dvARB = (PFNGLMULTITEXCOORD4DVARBPROC)&rbx_glMultiTexCoord4dvARB;
+    glActiveTextureARB = (PFNGLACTIVETEXTUREARBPROC)&rbx_glActiveTextureARB;
+    glClientActiveTextureARB = (PFNGLCLIENTACTIVETEXTUREARBPROC)&rbx_glClientActiveTextureARB;
+    glBlendEquationEXT = (PFNGLBLENDEQUATIONEXTPROC)&rbx_glBlendEquationEXT;
+    glBindBufferARB = (PFNGLBINDBUFFERARBPROC)&rbx_glBindBufferARB;
+    glDeleteBuffersARB = (PFNGLDELETEBUFFERSARBPROC)&rbx_glDeleteBuffersARB;
+    glGenBuffersARB = (PFNGLGENBUFFERSARBPROC)&rbx_glGenBuffersARB;
+    glIsBufferARB = (PFNGLISBUFFERARBPROC)&rbx_glIsBufferARB;
+    glBufferDataARB = (PFNGLBUFFERDATAARBPROC)&rbx_glBufferDataARB;
+    glBufferSubDataARB = (PFNGLBUFFERSUBDATAARBPROC)&rbx_glBufferSubDataARB;
+    glDrawRangeElements = (PFNGLDRAWRANGEELEMENTSPROC)&rbx_glDrawRangeElements;
+    glBindRenderbufferEXT = (PFNGLBINDRENDERBUFFEREXTPROC)&rbx_glBindRenderbufferEXT;
+    glDeleteRenderbuffersEXT = (PFNGLDELETERENDERBUFFERSEXTPROC)&rbx_glDeleteRenderbuffersEXT;
+    glGenRenderbuffersEXT = (PFNGLGENRENDERBUFFERSEXTPROC)&rbx_glGenRenderbuffersEXT;
+    glRenderbufferStorageEXT = (PFNGLRENDERBUFFERSTORAGEEXTPROC)&rbx_glRenderbufferStorageEXT;
+    glBindFramebufferEXT = (PFNGLBINDFRAMEBUFFEREXTPROC)&rbx_glBindFramebufferEXT;
+    glDeleteFramebuffersEXT = (PFNGLDELETEFRAMEBUFFERSEXTPROC)&rbx_glDeleteFramebuffersEXT;
+    glGenFramebuffersEXT = (PFNGLGENFRAMEBUFFERSEXTPROC)&rbx_glGenFramebuffersEXT;
+    glCheckFramebufferStatusEXT = (PFNGLCHECKFRAMEBUFFERSTATUSEXTPROC)&rbx_glCheckFramebufferStatusEXT;
+    glFramebufferTexture2DEXT = (PFNGLFRAMEBUFFERTEXTURE2DEXTPROC)&rbx_glFramebufferTexture2DEXT;
+    glFramebufferRenderbufferEXT = (PFNGLFRAMEBUFFERRENDERBUFFEREXTPROC)&rbx_glFramebufferRenderbufferEXT;
+    glGenerateMipmapEXT = (PFNGLGENERATEMIPMAPEXTPROC)&rbx_glGenerateMipmapEXT;
+
+    extensionSet.insert("GL_ARB_multitexture");
+    extensionSet.insert("GL_ARB_texture_non_power_of_two");
+    extensionSet.insert("GL_EXT_texture_edge_clamp");
+    extensionSet.insert("GL_EXT_texture_cube_map");
+    extensionSet.insert("GL_ARB_texture_cube_map");
+    extensionSet.insert("GL_EXT_framebuffer_object");
+    extensionSet.insert("GL_SGIS_generate_mipmap");
+
+    _supports_GL_ARB_texture_non_power_of_two = true;
+    _supports_GL_EXT_texture_rectangle = false;
+    _supports_GL_ARB_vertex_program = false;
+    _supports_GL_NV_vertex_program2 = false;
+    _supports_GL_ARB_vertex_buffer_object = false;
+    _supports_GL_EXT_texture_edge_clamp = true;
+    _supports_GL_ARB_texture_border_clamp = false;
+    _supports_GL_EXT_texture_3D = false;
+    _supports_GL_ARB_fragment_program = false;
+    _supports_GL_ARB_multitexture = true;
+    _supports_GL_EXT_stencil_wrap = true;
+    _supports_GL_EXT_stencil_two_side = false;
+    _supports_GL_ATI_separate_stencil = false;
+    _supports_GL_EXT_texture_compression_s3tc = false;
+    _supports_GL_EXT_texture_cube_map = true;
+    _supports_GL_ARB_shadow = false;
+    _supports_GL_ARB_shader_objects = false;
+    _supports_GL_ARB_shading_language_100 = false;
+    _supports_GL_ARB_fragment_shader = false;
+    _supports_GL_ARB_vertex_shader = false;
+    _supports_GL_EXT_framebuffer_object = true;
+
+    _numTextureUnits = iMin(G3D_MAX_TEXTURE_UNITS, glGetInteger(GL_MAX_TEXTURE_UNITS_ARB));
+    _numTextureCoords = _numTextureUnits;
+    _numTextures = _numTextureUnits;
+
+    checkAllBugs();
+    _initialized = true;
+    return;
+#endif
+
     #define LOAD_EXTENSION(name) \
         *((void**)&name) = glGetProcAddress(#name);
 
@@ -568,6 +639,25 @@ bool GLCaps::supports(const std::string& extension) {
 
 bool GLCaps::supports(const TextureFormat* fmt) {
 
+#ifdef G3D_GLES_COMPAT
+    if (fmt == NULL) {
+        return false;
+    }
+    switch (fmt->code) {
+    case TextureFormat::CODE_L8:
+    case TextureFormat::CODE_A8:
+    case TextureFormat::CODE_LA4:
+    case TextureFormat::CODE_LA8:
+    case TextureFormat::CODE_RGB5:
+    case TextureFormat::CODE_RGB5A1:
+    case TextureFormat::CODE_RGB8:
+    case TextureFormat::CODE_RGBA8:
+        return true;
+    default:
+        return false;
+    }
+#endif
+
     // First, check if we've already tested this format
     if (! _supportedTextureFormat.containsKey(fmt)) {
         uint8 bytes[8 * 8 * 4];
@@ -634,6 +724,11 @@ bool GLCaps::supports_two_sided_stencil() {
 
 
 void GLCaps::checkBug_cubeMapBugs() {
+#ifdef G3D_GLES_COMPAT
+    bug_glMultiTexCoord3fvARB = false;
+    bug_normalMapTexGen = false;
+    return;
+#endif
     bool hasCubeMap = strstr((char*)glGetString(GL_EXTENSIONS), "GL_EXT_texture_cube_map") != NULL;
 
     if (! hasCubeMap) {
@@ -861,6 +956,10 @@ static void configureCameraAndLights() {
 
 
 void GLCaps::checkBug_redBlueMipmapSwap() {
+#ifdef G3D_GLES_COMPAT
+    bug_redBlueMipmapSwap = false;
+    return;
+#endif
     static bool hasAutoMipmap = false;
     {
         std::string ext = (char*)glGetString(GL_EXTENSIONS);
@@ -926,6 +1025,10 @@ void GLCaps::checkBug_mipmapGeneration() {
 
 
 void GLCaps::checkBug_slowVBO() {
+#ifdef G3D_GLES_COMPAT
+    bug_slowVBO = false;
+    return;
+#endif
     bool hasVBO = 
         (strstr((char*)glGetString(GL_EXTENSIONS), "GL_ARB_vertex_buffer_object") != NULL) &&
             (glGenBuffersARB != NULL) && 

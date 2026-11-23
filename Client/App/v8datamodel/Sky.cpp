@@ -87,7 +87,11 @@ G3D::SkyRef Sky::getG3DSky(Sky* sky)
 		}
 	}
 
-	return G3D::Sky::fromFile(nullptr, skyFolder(), "null_plainsky512_*.jpg");
+	std::string dir = skyFolder();
+	if (std::filesystem::exists(dir + "null_plainsky512_up.jpg")) {
+		return G3D::Sky::fromFile(nullptr, dir, "null_plainsky512_*.jpg");
+	}
+	return G3D::Sky::fromFile(nullptr, dir, "sky2007_*.png");
 }
 
 Sky::Sky() : drawCelestialBodies(true), numStars(3000)

@@ -39,6 +39,9 @@ public:
 	virtual void setKeyState(SDLKey key, bool down) = 0;
 	virtual void setCursorId(Adorn* adorn, const TextureId& cursorId);
 
+	virtual G3D::Vector2 getVirtualJoystick() const { return G3D::Vector2::zero(); }
+	virtual bool isVirtualJumpDown() const { return false; }
+
 	void getNavKeys(NavKeys& navKeys) const;
 	void renderGameCursor(Adorn*);
 	bool altKeyDown() const { return keyDown(SDLK_RALT) || keyDown(SDLK_LALT); }

@@ -37,6 +37,9 @@
     #define G3D_MINGW32 
 #elif __linux__ 
     #define G3D_LINUX
+    #ifdef __ANDROID__
+        #define G3D_ANDROID
+    #endif
 #elif __APPLE__ 
     #define G3D_OSX
 #else
@@ -73,28 +76,28 @@
 
 #ifdef G3D_LINUX
 #   ifndef __GNUC__
-#       error G3D only supports the gcc compiler on Linux.
+#       error G3D only supports the gcc/clang compiler on Linux.
 #   endif
 
-#   if !defined(__i386__) && !defined(__x86_64__)
-#       error G3D only supports x86 machines on Linux.
+#   if !defined(__i386__) && !defined(__x86_64__) && !defined(__aarch64__) && !defined(__arm__)
+#       error G3D unsupported architecture on Linux.
 #   endif
 
 #   define G3D_DEPRECATED __attribute__((__deprecated__))
 
 #   ifndef __cdecl
-#       ifdef __x86_64__
-#           define __cdecl
-#       else
+#       if defined(__i386__) && !defined(__ANDROID__)
 #           define __cdecl __attribute__((cdecl))
+#       else
+#           define __cdecl
 #       endif
 #   endif
 
 #   ifndef __stdcall
-#       ifdef __x86_64__
-#           define __stdcall
-#       else
+#       if defined(__i386__) && !defined(__ANDROID__)
 #           define __stdcall __attribute__((stdcall))
+#       else
+#           define __stdcall
 #       endif
 #   endif
 
