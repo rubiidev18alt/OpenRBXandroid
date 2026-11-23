@@ -54,12 +54,20 @@ jobs:
         run: |
           set -o pipefail
           if ! gradle assembleDebug --no-daemon --console=plain 2>&1 | tee /tmp/gradle-build.log; then
-            tail -n 120 /tmp/gradle-build.log | python3 -c '
-          import sys
-          lines = [l.rstrip("\n") for l in sys.stdin if l.strip()]
-          chunk = "\n".join(lines[-40:])
-          print("::error::Gradle build failed:\n" + chunk.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A"))
-          '
+            python3 - <<'PY'
+          import re
+          lines = [l.strip() for l in open('/tmp/gradle-build.log', errors='replace') if l.strip()]
+          errs = [l for l in lines if re.search(r'(CMake Error|FAILED:|FAILURE:|:\d+:\d*: error:|ld\.lld: error|^e: |Execution failed|What went wrong)', l)]
+          tail = lines[-25:]
+          combined = []
+          seen = set()
+          for l in errs + tail:
+              if l not in seen:
+                  seen.add(l)
+                  combined.append(l[:260])
+          for i in range(0, min(len(combined), 60), 6):
+              print("::error::" + " | ".join(combined[i:i+6]))
+          PY
             exit 1
           fi
 
