@@ -23,7 +23,7 @@ private:
 	}
 
 public:
-	static const unsigned int numStrips = 32;
+	static constexpr unsigned int numStrips = 32;
 
 	static float stripWidth();
 
