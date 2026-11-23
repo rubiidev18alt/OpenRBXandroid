@@ -10,7 +10,7 @@
         <item name="android:navigationBarColor">#101622</item>
     </style>
 
-    <style name="Theme.OpenRBX.Game" parent="Theme.OpenRBX">
+    <style name="Theme.OpenRBX.Fullscreen" parent="Theme.OpenRBX">
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowBackground">#000000</item>
     </style>
