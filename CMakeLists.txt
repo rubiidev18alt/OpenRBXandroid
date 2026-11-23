@@ -52,6 +52,8 @@ function(openrbx_compile_defaults NAME)
   if (MSVC)
     target_compile_options(${NAME} PRIVATE /W3)
     target_compile_definitions(${NAME} PRIVATE _CRT_SECURE_NO_WARNINGS)
+  elseif (ANDROID)
+    target_compile_options(${NAME} PRIVATE -Wno-c++11-narrowing -Wno-register -Wno-deprecated-declarations)
   endif()
 endfunction()
 
